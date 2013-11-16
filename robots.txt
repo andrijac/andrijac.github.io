@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://andrijac.github.io/sitemap.xml 
+Sitemap: http://andrijac.github.io//sitemap.xml 
