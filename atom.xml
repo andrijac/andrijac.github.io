@@ -4,7 +4,7 @@
   <title><![CDATA[Andrija's Blog]]></title>
   <link href="http://andrijac.github.io//atom.xml" rel="self"/>
   <link href="http://andrijac.github.io//"/>
-  <updated>2013-11-16T11:22:50+00:00</updated>
+  <updated>2013-11-16T11:23:40+00:00</updated>
   <id>http://andrijac.github.io//</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
@@ -18,9 +18,7 @@
     <link href="http://andrijac.github.io//blog/2013/11/16/test-post/"/>
     <updated>2013-11-16T11:20:00+00:00</updated>
     <id>http://andrijac.github.io//blog/2013/11/16/test-post</id>
-    <content type="html"><![CDATA[<h1>Test post</h1>
-
-<blockquote><p>This will be first post</p></blockquote>
+    <content type="html"><![CDATA[<blockquote><p>This will be first post</p></blockquote>
 
 <p>Here is markdown list:</p>
 
