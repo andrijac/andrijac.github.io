@@ -1,10 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://andrijac.github.io//blog/2013/11/16/test-post/</loc>
-        <lastmod>2013-12-04T04:45:32+00:00</lastmod>
-    </url>
-    <url>
         <loc>
             http://andrijac.github.io//blog/2013/12/02/backup-existing-project-to-cloud-source-control/
         </loc>
