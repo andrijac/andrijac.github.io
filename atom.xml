@@ -4,7 +4,7 @@
   <title><![CDATA[Andrija's Blog]]></title>
   <link href="http://andrijac.github.io//atom.xml" rel="self"/>
   <link href="http://andrijac.github.io//"/>
-  <updated>2013-12-04T05:34:49+00:00</updated>
+  <updated>2013-12-04T05:42:18+00:00</updated>
   <id>http://andrijac.github.io//</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
@@ -82,6 +82,28 @@ hg add
 hg commit -m "commit 2013-12-01" -u username
 hg push
 </code></pre>
+
+<p>Discuss on <a href="https://plus.google.com/u/0/+AndrijaCacanovic/posts/QpWcyavFGdv">Google+ post</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Test post]]></title>
+    <link href="http://andrijac.github.io//blog/2013/11/16/test-post/"/>
+    <updated>2013-11-16T11:20:00+00:00</updated>
+    <id>http://andrijac.github.io//blog/2013/11/16/test-post</id>
+    <content type="html"><![CDATA[<blockquote><p>This will be first post</p></blockquote>
+
+<p>Here is markdown list:</p>
+
+<ol>
+<li>First item</li>
+<li><strong>Second item</strong></li>
+<li><em>Others</em></li>
+<li>&hellip;</li>
+<li>Another one</li>
+</ol>
+
 ]]></content>
   </entry>
   
