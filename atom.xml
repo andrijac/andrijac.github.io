@@ -4,7 +4,7 @@
   <title><![CDATA[Andrija's Blog]]></title>
   <link href="http://andrijac.github.io//atom.xml" rel="self"/>
   <link href="http://andrijac.github.io//"/>
-  <updated>2013-11-17T05:16:05+00:00</updated>
+  <updated>2013-12-04T05:34:49+00:00</updated>
   <id>http://andrijac.github.io//</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
@@ -14,22 +14,74 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Test post]]></title>
-    <link href="http://andrijac.github.io//blog/2013/11/16/test-post/"/>
-    <updated>2013-11-16T11:20:00+00:00</updated>
-    <id>http://andrijac.github.io//blog/2013/11/16/test-post</id>
-    <content type="html"><![CDATA[<blockquote><p>This will be first post</p></blockquote>
+    <title type="html"><![CDATA[Backup existing project to cloud source control]]></title>
+    <link href="http://andrijac.github.io//blog/2013/12/02/backup-existing-project-to-cloud-source-control/"/>
+    <updated>2013-12-02T07:12:00+00:00</updated>
+    <id>http://andrijac.github.io//blog/2013/12/02/backup-existing-project-to-cloud-source-control</id>
+    <content type="html"><![CDATA[<p>This artical explains how to backup your existing Visual Studio project to Bitbucket using Mercurial. This may as well apply to any other type of project out there, but I might use some Visual Studio specifics in article.</p>
 
-<p>Here is markdown list:</p>
+<p>All you need for this is to download <a href="http://mercurial.selenic.com/">Mercurial</a>.</p>
 
-<ol>
-<li>First item</li>
-<li><strong>Second item</strong></li>
-<li><em>Others</em></li>
-<li>&hellip;</li>
-<li>Another one</li>
-</ol>
+<h2>Create repository<a name="create" href="#create" class="anchor">#</a></h2>
 
+<p>I use Bitbucket because it has free private repositories. It supports both Mercurial and Git.
+I prefer to use Mercurial on Bitbucket because I have used it from the beginning and find it more intuitive to use.
+There is great tutorial on how to use Mercurial by Joel Spolsky on <a href="http://hginit.com">hginit.com</a>. I highly recommend starting there.</p>
+
+<p>First, you need to create repository in Bitbucket. When giving a name to repository, try not to use white space because you might have trouble later on when you use command line. Make sure Mercurial is selected as a &ldquo;Repository type&rdquo;.
+Also, make sure &ldquo;Access level: This is a private repository&rdquo; is checked. You could create public repository, but I assume you will be backing up the code that you don&rsquo;t want public to see.</p>
+
+<h2>Clone repository<a name="clone" href="#clone" class="anchor">#</a></h2>
+
+<p>Let&rsquo;s say you have folder structure like this:</p>
+
+<pre><code>~/
+  |_MyProject
+    |_DevelopBranch     
+</code></pre>
+
+<p>You want to backup all code from <code>DevelopBranch</code>.</p>
+
+<p>Go to command prompt and locate <code>cd ~/MyProject</code></p>
+
+<p>Execute <code>hg clone https://username@bitbucket.org/username/repository-name</code> to create local repository.<br />
+This command will create local folder with repository.
+Note to replace <code>username</code> with your username on Bitbucket and <code>repository-name</code> with your repository name.
+When I did this, my repository name was MyProject-Develop and I did not want my folder to be named like this, but I wanted it to remain <code>DevelopBranch</code>. You can keep your folder name by adding folder name at the end of command:
+<code>hg clone https://username@bitbucket.org/username/repository-name foldter-name</code>. You can create as many respositories as you want, so if you make a mistake, just delete the folder and try again.</p>
+
+<p>If you try to create repository in same folder where your code is already you will notice that cloning will not execute but it will say that folder is not empty.
+Workaround for this is to make a rename existing folder tempraraly, execute clone command, move <code>.hg</code> folder to original folder, delete clone folder and rename back the original folder :)
+So, I renamed the folder to <code>DevelopBranch2</code> and executed clone command. Now, command was successful and I had new folder <code>DevelopBranch</code> which contains only one folder inside <code>.hg</code>. I copied the <code>.hg</code> folder to <code>DevelopBranch2</code>, deleted <code>DevelopBranch</code> and renamed <code>DevelopBranch2</code> back to <code>DevelopBranch</code>. Simple, right? :)</p>
+
+<h2>Add files to repository<a name="add" href="#add" class="anchor">#</a></h2>
+
+<p>Create <code>.hgignore</code> file from <a href="https://gist.github.com/andrijac/4027502">https://gist.github.com/andrijac/4027502</a> and place it in <code>DevelopBranch</code> folder. This will exclude files from eyes of source control that usually are compiled or outputted by build process, very similar like how TFS is ignoring specific files from your source folder (like .dll, .exe, /obj etc.).</p>
+
+<p>In command line, go to <code>cd ~/MyProject/DevelopBranch</code>. All further commands will be executed from this path.</p>
+
+<p>Run the command <code>hg status</code> in your DevelopBranch to see what has Mercurial detected for adding into source control. If the list is too big (it usually is when adding big project), use <code>hg status &gt; output.txt &amp;&amp; output.txt</code> to see all the files added. You will see that files have <code>?</code> status on the left side of file path indicating that files are detected in target folder but are not part of repository yet.</p>
+
+<p>Execute <code>hg add</code> to add all the files to repository.</p>
+
+<p>Now when you run <code>hg status</code> you should get <code>A</code> status on the left side of file name indicating that files is added.</p>
+
+<p>Next, commit the changes in repository: <br />
+<code>hg commit -m "initial commit" -u username</code></p>
+
+<p>Next, execute <code>hg push</code> which will push (upload) repository changes to Bitbucket repository.
+You will be asked to enter password for authentication.
+It might take some time to upload all the changes depending on your project size.</p>
+
+<h2>Maintaining the future changes<a name="maintain" href="#maintain" class="anchor">#</a></h2>
+
+<p>And you are done. Next time you want to upload new changes in project:</p>
+
+<pre><code>hg status
+hg add
+hg commit -m "commit 2013-12-01" -u username
+hg push
+</code></pre>
 ]]></content>
   </entry>
   
