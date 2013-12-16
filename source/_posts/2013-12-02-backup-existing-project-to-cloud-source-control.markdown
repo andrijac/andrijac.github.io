@@ -69,7 +69,7 @@ Maintaining the future changes<a name="maintain" href="#maintain" class="anchor"
 And you are done. Next time you want to upload new changes in project:
 
     hg status
-    hg add
+    hg addremove
     hg commit -m "commit 2013-12-01" -u username
     hg push
     
