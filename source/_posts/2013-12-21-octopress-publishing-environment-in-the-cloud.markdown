@@ -15,6 +15,7 @@ I was looking for a blog platform:
 - Ability to recreate a blog anywhere anytime.
 - Keeping a track of changes.
 
+
 Octopress<a name="octopress" href="#octopress" class="anchor">#</a>
 -
 
@@ -34,6 +35,7 @@ You are not depended on proprietary software or some closed platform to recreate
 ####*Keeping a track of changes*
 To start using Octopress, you need to fork it on github, which means you will immediately have online repository for Octopress. Anything you change or publish can be commited in git. Is there any better way to track changes in blog? I do not think there is.
 
+
 Nitrous.io<a name="nitrous" href="#nitrous" class="anchor">#</a>
 -
 I found about [Nitrous.io](https://www.nitrous.io/join/OqTrHcEDHjk) on Joe Marini's post [Tools for Developing on ChromeOS](http://joemarini.blogspot.ae/2013/11/tools-for-developing-on-chromeos.html).
@@ -47,9 +49,20 @@ Octopress + Nitrous.io<a name="OctopressNitrous" href="#OctopressNitrous" class=
 I am switching workstations and environments a lot. On the other hand, Octopress requires "things" to be preinstalled things in your local environment. I also switch OSs so having to setup environment on Windows all the time can be time consuming.
 I figured I could have a always Octopress ready environemnt on Nitrous.io, so I gave it a try. This is only way to have Octopress always avaialble to you where ever you are. The trend how cloud computing is progressing, I think that personal workstation on remote VM [will be more and more pratice](http://yieldthought.com/post/12239282034/swapped-my-macbook-for-an-ipad).
 
+
 Setting up<a name="setup" href="#setup" class="anchor">#</a>
 -
 
+***
+#### In summary
+These are the steps that we will need to go through to setup a blog:
+
+- Register on Github
+- Register on Nitrous.io
+- Change a Ruby version
+- Clone and setup Octopress
+
+***
 I have chosen to host the blog on github, which means that address will be [username].github.io. If you want to have it also on github, make sure you like the username you choose for yourself.
 
 I am hosting this blog on github and I will describe here how to host it there. You do have [other options available](http://octopress.org/docs/deploying/), and since blog is generated in plaing html-css-javascript, it can be hosted anywhere after all.
@@ -88,7 +101,7 @@ Clone Octopress from Github. I created a folder inside workspace folder:
     > git clone git://github.com/imathis/octopress.git ~/workspace/octopress
     > cd ~/workspace/octopress   
     
-Setup local use of Ruby 1.9.3:
+Setup use of Ruby 1.9.3 in local folder (your path should be now ~/workspace/octopress):
     
     > rbenv local 1.9.3-p0
     > rbenv rehash
@@ -102,6 +115,59 @@ Install dependencies:
 Install default Octopress theme:
 
     > rake install
+
+
+### Deploying to Github Pages <a name="githubdeploy" href="#githubdeploy" class="anchor">#</a>
+
+As I said before, if you are planning to deploy to GitHub pages, your address will be `http://username.github.io`. 
+You need to create a repository which will be called `username.github.io`. 
+[Here are detail instructions](http://octopress.org/docs/deploying/github/), but here I will give summary of all the steps you need to do.
+
+Run: 
+
+    > rake setup_github_pages
+
+It will ask you for repository url, which it suppose to be `https://github.com/username/username.github.io.git`.
+Github recomments https over ssh, [why?](http://stackoverflow.com/a/11041782/84852)
+
+Make sure are have github email and username configured:
+
+    > git config --global user.email "your email"
+    > git config --global user.name "username"
+
+Next, push the current source to `source` branch:
+
+    > git add .
+    > git commit -m "commit message"
+    > git push origin source
+
+Next, generate and deploy.
+
+    > rake generate
+    > rake deploy
+
+To clarify, you will have 2 branches in repository:
+
+- `source` branch holding the source of the blog, which you are using for generation.
+- `master` branch which will be static generated content. Github pages are configured so anything that appears in repository called `username.github.io` in `master` branch will appear on github page url.
+
+`rake generate` will generate static content locally in `_deploy/` folder.
+`rake deploy` will push the changes to `master` branch.
+
+At this point, you are done. It will take few minutes for github to publish the page for the first time, later on it will be published quicker.
+
+Updating the blog <a name="updating" href="#updating" class="anchor">#</a>
+-
+
+- git coomit i push u source
+- novi post
+- configuratcija bloga
+- link do dokumentcije
+- previewing
+
+
+
+
 
 
 
