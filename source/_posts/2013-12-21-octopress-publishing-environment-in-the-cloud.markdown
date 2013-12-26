@@ -50,7 +50,7 @@ It seemed very interesting because it was a remote view on VM in browser, render
 I gave it a try and created Ruby box. What I got is Linux VM running:
 {% codeblock %}
 lsb_release -a
-#Ubuntu 12.04.3 LTS.
+# Ubuntu 12.04.3 LTS.
 {% endcodeblock %}
 
 Once I have setup the box, I went on to [bonus page](https://www.nitrous.io/app#/n2o/bonus) and connected all of my online identities to Nitrous.io to get additional N2O (N2O is like are Nitrous.io currency for upgrading your box).
