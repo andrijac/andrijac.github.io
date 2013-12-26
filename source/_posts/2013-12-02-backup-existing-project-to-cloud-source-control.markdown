@@ -72,5 +72,5 @@ And you are done. Next time you want to upload new changes in project:
     hg addremove
     hg commit -m "commit 2013-12-01" -u username
     hg push
-    
-Discuss on [Google+ post](https://plus.google.com/u/0/+AndrijaCacanovic/posts/QpWcyavFGdv).
+
+HTH
