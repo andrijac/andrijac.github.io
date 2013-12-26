@@ -43,9 +43,9 @@ You are not depended on proprietary software or some closed platform to recreate
 To start using Octopress, you need to fork it on Github, which means you will immediately have Git repository for Octopress. Anything you change or publish can be committed in Git. Is there any better way to track changes in blog? I do not think so.
 
 
-Nitrous.io<a name="nitrous" href="#nitrous" class="anchor">#</a>
+Nitrous.IO<a name="nitrous" href="#nitrous" class="anchor">#</a>
 -
-I found about [Nitrous.io](https://www.nitrous.io/join/OqTrHcEDHjk) on Joe Marini's post [Tools for Developing on ChromeOS](http://joemarini.blogspot.ae/2013/11/tools-for-developing-on-chromeos.html).
+I found about [Nitrous.IO](https://www.nitrous.io/join/OqTrHcEDHjk) on Joe Marini's post [Tools for Developing on ChromeOS](http://joemarini.blogspot.ae/2013/11/tools-for-developing-on-chromeos.html).
 It seemed very interesting because it was a remote view on VM in browser, rendered in HTML. And as we know once rendered in HTML it can be displayed and worked with anywhere, no plugins or third-party software required.
 I gave it a try and created Ruby box. What I got is Linux VM running:
 {% codeblock %}
@@ -53,12 +53,12 @@ lsb_release -a
 # Ubuntu 12.04.3 LTS.
 {% endcodeblock %}
 
-Once I have setup the box, I went on to [bonus page](https://www.nitrous.io/app#/n2o/bonus) and connected all of my online identities to Nitrous.io to get additional N2O (N2O is like are Nitrous.io currency for upgrading your box).
+Once I have setup the box, I went on to [bonus page](https://www.nitrous.io/app#/n2o/bonus) and connected all of my online identities to Nitrous.IO to get additional N2O (N2O is like are Nitrous.IO currency for upgrading your box).
 
-Octopress + Nitrous.io<a name="OctopressNitrous" href="#OctopressNitrous" class="anchor">#</a>
+Octopress + Nitrous.IO<a name="OctopressNitrous" href="#OctopressNitrous" class="anchor">#</a>
 -
 I am switching workstations and environments a lot. On the other hand, Octopress requires some stuff to be preinstalled in your local environment. I also switch OSs so having to setup environment on Windows all the time can be time consuming.
-I figured I could have an always Octopress ready environment on Nitrous.io. This is only way to have Octopress always available. The trend how cloud computing is progressing, I think that personal workstation on remote VM [will be more and more practice](http://yieldthought.com/post/12239282034/swapped-my-macbook-for-an-ipad).
+I figured I could have an always Octopress ready environment on Nitrous.IO. This is only way to have Octopress always available. The trend how cloud computing is progressing, I think that personal workstation on remote VM [will be more and more practice](http://yieldthought.com/post/12239282034/swapped-my-macbook-for-an-ipad).
 
 
 Setting up<a name="setup" href="#setup" class="anchor">#</a>
@@ -69,7 +69,7 @@ Setting up<a name="setup" href="#setup" class="anchor">#</a>
 These are the steps that we will need to go through to setup a blog:
 
 - Register on Github
-- Register on Nitrous.io
+- Register on Nitrous.IO
 - Change a Ruby version
 - Clone and setup Octopress
 
@@ -78,7 +78,7 @@ I have chosen to host the blog on Github, which means that address will be [user
 
 I am hosting this blog on Github and I will describe here how to host it there. You do have [other options available](http://octopress.org/docs/deploying/), and since blog is generated in plain html-css-javascript, it can be hosted anywhere.
 
-Register on [Nitrous.io](https://www.nitrous.io/join/OqTrHcEDHjk) and create a Ruby box. I am still not sure what are the differences between other boxes, for example I have node.js installed on Ruby box so I'm not sure what is special about node.js box.
+Register on [Nitrous.IO](https://www.nitrous.io/join/OqTrHcEDHjk) and create a Ruby box. I am still not sure what are the differences between other boxes, for example I have node.js installed on Ruby box so I'm not sure what is special about node.js box.
 
 Box will be created in a few seconds and ready to roll. You will see `workspace` folder in folder tree on a side.
 
@@ -196,7 +196,7 @@ rake generate   # Generates posts and pages into the public directory
 rake watch      # Watches source/ and sass/ for changes and regenerates
 rake preview    # Watches, and mounts a webserver at http://localhost:4000
 {% endcodeblock %}
-You will be able to see your blog on port 4000. In Nitrous.io, go to menu `Preview > Port 4000` and it will open a blog preview in new tab
+You will be able to see your blog on port 4000. In Nitrous.IO, go to menu `Preview > Port 4000` and it will open a blog preview in new tab
 
 - To commit changes to Git, use the same [git commands](#commit) like in initial commit.
 - Once you are ready to publish, use the same [rake commands](#deploy) for publish like you did initially.
