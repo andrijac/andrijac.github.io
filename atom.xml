@@ -4,7 +4,7 @@
   <title><![CDATA[Andrija's Blog]]></title>
   <link href="http://andrijac.github.io//atom.xml" rel="self"/>
   <link href="http://andrijac.github.io//"/>
-  <updated>2013-12-26T07:48:27+00:00</updated>
+  <updated>2013-12-26T07:50:26+00:00</updated>
   <id>http://andrijac.github.io//</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
@@ -76,7 +76,7 @@ I gave it a try and created Ruby box. What I got is Linux VM running:</p>
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>lsb_release -a
-</span><span class='line'>#Ubuntu 12.04.3 LTS.</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'># Ubuntu 12.04.3 LTS.</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Once I have setup the box, I went on to <a href="https://www.nitrous.io/app#/n2o/bonus">bonus page</a> and connected all of my online identities to Nitrous.io to get additional N2O (N2O is like are Nitrous.io currency for upgrading your box).</p>
