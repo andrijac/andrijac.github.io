@@ -4,7 +4,7 @@
   <title><![CDATA[Andrija's Blog]]></title>
   <link href="http://andrijac.github.io//atom.xml" rel="self"/>
   <link href="http://andrijac.github.io//"/>
-  <updated>2013-12-26T07:46:39+00:00</updated>
+  <updated>2013-12-26T07:48:27+00:00</updated>
   <id>http://andrijac.github.io//</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
@@ -342,7 +342,7 @@ hg commit -m "commit 2013-12-01" -u username
 hg push
 </code></pre>
 
-<p>Discuss on <a href="https://plus.google.com/u/0/+AndrijaCacanovic/posts/QpWcyavFGdv">Google+ post</a>.</p>
+<p>HTH</p>
 ]]></content>
   </entry>
   
