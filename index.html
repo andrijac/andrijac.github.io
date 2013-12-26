@@ -9,7 +9,8 @@
   <meta name="author" content="Andrija Cacanovic">
 
   
-  <meta name="description" content="This artical explains how to backup your existing Visual Studio project to Bitbucket using Mercurial. This may as well apply to any other type of &hellip;">
+  <meta name="description" content="I was looking for a blog platform: Good support for developers (sharing code snippets and github gists).
+Highly customizable layout &ndash; I don& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +79,292 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/21/octopress-publishing-environment-in-the-cloud/">Octopress Publishing Environment in the Cloud</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-21T10:29:00+00:00" pubdate data-updated="true">Dec 21<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was looking for a blog platform:</p>
+
+<ul>
+<li>Good support for developers (sharing code snippets and github gists).</li>
+<li>Highly customizable layout &ndash; I don&rsquo;t have to depend on decision of some third party whether they will add a feature that I need</li>
+<li>Ability to back up blog content.</li>
+<li>Independency of hosting platform.</li>
+<li>Ability to recreate a blog anywhere anytime.</li>
+<li>Keeping a track of changes.</li>
+</ul>
+
+
+<h2>Octopress<a name="octopress" href="#octopress" class="anchor">#</a></h2>
+
+<p>I sounds too good to be true, but the thing is you can find all these features in <a href="http://octopress.org/">Octopress</a>.</p>
+
+<p><em><a href="http://octopress.org/">octopress.org</a></em> :</p>
+
+<blockquote><p>Octopress is a framework designed by <a href="http://brandonmathis.com/">Brandon Mathis</a> for <a href="http://github.com/mojombo/jekyll">Jekyll</a>, the blog aware static site generator powering Github Pages</p></blockquote>
+
+<p>Some features of Octopress mentioned here also apply to Jekyll.</p>
+
+<h4><em>Good support for developers</em></h4>
+
+<p>In Octopress, there is <a href="http://octopress.org/docs/">great support</a> for embedding code in your blog.</p>
+
+<h4><em>Highly customizable layout</em> (review)</h4>
+
+<p>You can customize anything on the blog. Big advantage is that there is no admin user interface that will interfere of changing anything on blog. Some people would consider this as a disadvantage, but I think that to have highly generic interface with ability to change anything in website is very hard to make and to maintain.
+If you want to add a feature, it would require you to have user interface to support it, which also mean additional user interface to maintain along with this feature. By not having any user interface and counting on user to change the blog manually, the possibilities are endless.<br />
+Of course this assumes that you know what you are doing which means that Octopress is not for anyone. <br />
+Read more on this topic in <a href="http://www.cooper.com/journal/2012/08/the-best-interface-is-no-interface">The best interface is no interface</a>.</p>
+
+<h4><em>Ability to back up blog content</em></h4>
+
+<p>You are writing Octopress articles in plain text Markdown so there is no database to be backed up, there is no special data store to extract data from, and you just back up the files. Ever since Markdown became popular through Stackoverflow.com and Github, it is becoming more and more accepted in developer community as a common formatting syntax for documentation.</p>
+
+<h4><em>Independency of hosting platform</em></h4>
+
+<p>Final output of Octopress is static html-css-javascript, which means it can be hosted anywhere.</p>
+
+<h4><em>Ability to recreate a blog anywhere anytime</em></h4>
+
+<p>You are not depended on proprietary software or some closed platform to recreate the output of your blog, you can do that anytime you want.</p>
+
+<h4><em>Keeping a track of changes</em></h4>
+
+<p>To start using Octopress, you need to fork it on Github, which means you will immediately have Git repository for Octopress. Anything you change or publish can be committed in Git. Is there any better way to track changes in blog? I do not think so.</p>
+
+<h2>Nitrous.io<a name="nitrous" href="#nitrous" class="anchor">#</a></h2>
+
+<p>I found about <a href="https://www.nitrous.io/join/OqTrHcEDHjk">Nitrous.io</a> on Joe Marini&rsquo;s post <a href="http://joemarini.blogspot.ae/2013/11/tools-for-developing-on-chromeos.html">Tools for Developing on ChromeOS</a>.
+It seemed very interesting because it was a remote view on VM in browser, rendered in HTML. And as we know once rendered in HTML it can be displayed and worked with anywhere, no plugins or third-party software required.
+I gave it a try and created Ruby box. What I got is Linux VM running:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>lsb_release -a
+</span><span class='line'>#Ubuntu 12.04.3 LTS.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once I have setup the box, I went on to <a href="https://www.nitrous.io/app#/n2o/bonus">bonus page</a> and connected all of my online identities to Nitrous.io to get additional N2O (N2O is like are Nitrous.io currency for upgrading your box).</p>
+
+<h2>Octopress + Nitrous.io<a name="OctopressNitrous" href="#OctopressNitrous" class="anchor">#</a></h2>
+
+<p>I am switching workstations and environments a lot. On the other hand, Octopress requires some stuff to be preinstalled in your local environment. I also switch OSs so having to setup environment on Windows all the time can be time consuming.
+I figured I could have an always Octopress ready environment on Nitrous.io. This is only way to have Octopress always available. The trend how cloud computing is progressing, I think that personal workstation on remote VM <a href="http://yieldthought.com/post/12239282034/swapped-my-macbook-for-an-ipad">will be more and more practice</a>.</p>
+
+<h2>Setting up<a name="setup" href="#setup" class="anchor">#</a></h2>
+
+<h4>In summary</h4>
+
+<p>These are the steps that we will need to go through to setup a blog:</p>
+
+<ul>
+<li>Register on Github</li>
+<li>Register on Nitrous.io</li>
+<li>Change a Ruby version</li>
+<li>Clone and setup Octopress</li>
+</ul>
+
+
+<p>I have chosen to host the blog on Github, which means that address will be [username].github.io.</p>
+
+<p>I am hosting this blog on Github and I will describe here how to host it there. You do have <a href="http://octopress.org/docs/deploying/">other options available</a>, and since blog is generated in plain html-css-javascript, it can be hosted anywhere.</p>
+
+<p>Register on <a href="https://www.nitrous.io/join/OqTrHcEDHjk">Nitrous.io</a> and create a Ruby box. I am still not sure what are the differences between other boxes, for example I have node.js installed on Ruby box so I&rsquo;m not sure what is special about node.js box.</p>
+
+<p>Box will be created in a few seconds and ready to roll. You will see <code>workspace</code> folder in folder tree on a side.</p>
+
+<p>Further, I have used <a href="http://octopress.org/docs/setup/">Octopress setup</a>.</p>
+
+<p>Git should be already installed, but you can check:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git --version
+</span><span class='line'># git version 1.8.4.3</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Check Ruby version:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ruby --version
+</span><span class='line'># ruby 2.0.0p247 (2013-06-27 revision 41674) [x86_64-linux]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ruby version required for Octopress is 1.9.3. So, we need to change a Ruby version. I used <code>rbenv</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+</span><span class='line'>echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+</span><span class='line'>echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+</span><span class='line'>git clone git://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+</span><span class='line'>source ~/.bashrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At this point, you might need to restart a console. Opening new console should do it.
+Install Ruby 1.9.3:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rbenv install 1.9.3-p0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Clone Octopress from Github. I created a folder inside workspace folder:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git ~/workspace/octopress
+</span><span class='line'>cd ~/workspace/octopress</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Setup use of Ruby 1.9.3 in local folder (your path should be now ~/workspace/octopress):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rbenv local 1.9.3-p0
+</span><span class='line'>rbenv rehash</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Install dependencies:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install bundler
+</span><span class='line'>rbenv rehash
+</span><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Install default Octopress theme:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake install</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Deploying to Github Pages <a name="githubdeploy" href="#githubdeploy" class="anchor">#</a></h3>
+
+<p>As I said before, if you are planning to deploy to Github pages, your address will be <code>http://username.github.io</code>.
+You need to create a repository which will be called <code>username.github.io</code>.
+<a href="http://octopress.org/docs/deploying/github/">Here are detail instructions</a>, but here I will give summary of all the steps you need to do.</p>
+
+<p>Run:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake setup_github_pages</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It will ask you for repository url, which it supposed to be <code>https://github.com/username/username.github.io.git</code>.
+Github recommends HTTPS over SSH, <a href="http://stackoverflow.com/a/11041782/84852">why?</a></p>
+
+<p>Make sure are have Github email and username configured:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global user.email "your email"
+</span><span class='line'>git config --global user.name "username"</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a name="commit"></a>Next, push the current source to <code>source</code> branch:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git add .
+</span><span class='line'>git commit -m "commit message"
+</span><span class='line'>git push origin source</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a name="deploy"></a>Next, generate and deploy.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake generate
+</span><span class='line'>rake deploy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To clarify, you will have 2 branches in repository:</p>
+
+<ul>
+<li><code>source</code> branch holding the source of the blog, which you are using for generation.</li>
+<li><code>master</code> branch which will be static generated content. Github pages are configured so anything that appears in repository called <code>username.github.io</code> in <code>master</code> branch will appear on your Github page.</li>
+</ul>
+
+
+<p><code>rake generate</code> will generate static content locally in <code>_deploy/</code> folder.
+<code>rake deploy</code> will push the changes to <code>master</code> branch.</p>
+
+<p>At this point, you are done. It will take few minutes for Github to publish the page for the first time, later on it will be pushed much quicker.</p>
+
+<h2>Blogging<a name="blogging" href="#blogging" class="anchor">#</a></h2>
+
+<p>Helpful links:</p>
+
+<ul>
+<li><a href="http://octopress.org/docs/configuring/">Cofiguration</a></li>
+<li><a href="http://octopress.org/docs/blogging/">Blogging Basics</a></li>
+</ul>
+
+
+<p>Some quick notes:</p>
+
+<ul>
+<li>Configuration file is <code>_config.yml</code>. You can configure all global settings there like title, description, add Github account, Disqus account etc.</li>
+<li>Create a new post: <code>rake new_post["post title"]</code> this will create a new markdown document in <code>source/_posts</code>.</li>
+<li>Preview the blog:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake generate   # Generates posts and pages into the public directory
+</span><span class='line'>rake watch      # Watches source/ and sass/ for changes and regenerates
+</span><span class='line'>rake preview    # Watches, and mounts a webserver at http://localhost:4000</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will be able to see your blog on port 4000. In Nitrous.io, go to menu <code>Preview &gt; Port 4000</code> and it will open a blog preview in new tab</p>
+
+<ul>
+<li>To commit changes to Git, use the same <a href="#commit">git commands</a> like in initial commit.</li>
+<li>Once you are ready to publish, use the same <a href="#deploy">rake commands</a> for publish like you did initially.</li>
+</ul>
+
+
+<p>HTH</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -191,6 +478,10 @@ hg push
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/21/octopress-publishing-environment-in-the-cloud/">Octopress Publishing Environment in the Cloud</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/12/02/backup-existing-project-to-cloud-source-control/">Backup Existing Project to Cloud Source Control</a>
