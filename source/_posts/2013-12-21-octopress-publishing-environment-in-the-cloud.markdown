@@ -19,7 +19,7 @@ I was looking for a blog platform:
 Octopress<a name="octopress" href="#octopress" class="anchor">#</a>
 -
 
-I sounds too good to be true, but the thing is you can find all these features in [Octopress](http://octopress.org/). 
+It sounds too good to be true, but the thing is you can find all these features in [Octopress](http://octopress.org/). 
 
 *[octopress.org](http://octopress.org/)* :
 > Octopress is a framework designed by [Brandon Mathis](http://brandonmathis.com/) for [Jekyll](http://github.com/mojombo/jekyll), the blog aware static site generator powering Github Pages
@@ -28,7 +28,7 @@ Some features of Octopress mentioned here also apply to Jekyll.
 
 ####*Good support for developers*
 In Octopress, there is [great support](http://octopress.org/docs/) for embedding code in your blog. 
-####*Highly customizable layout* (review)
+####*Highly customizable layout*
 You can customize anything on the blog. Big advantage is that there is no admin user interface that will interfere of changing anything on blog. Some people would consider this as a disadvantage, but I think that to have highly generic interface with ability to change anything in website is very hard to make and to maintain. 
 If you want to add a feature, it would require you to have user interface to support it, which also mean additional user interface to maintain along with this feature. By not having any user interface and counting on user to change the blog manually, the possibilities are endless.<br />
 Of course this assumes that you know what you are doing which means that Octopress is not for anyone. <br />
