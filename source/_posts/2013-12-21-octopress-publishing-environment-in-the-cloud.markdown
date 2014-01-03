@@ -96,6 +96,7 @@ ruby --version
 # ruby 2.0.0p247 (2013-06-27 revision 41674) [x86_64-linux] 
 {% endcodeblock %}
 
+<a name="rbenv"></a>
 Ruby version required for Octopress is 1.9.3. So, we need to change a Ruby version. I used `rbenv`:
 {% codeblock %}
 git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
@@ -202,3 +203,8 @@ You will be able to see your blog on port 4000. In Nitrous.IO, go to menu `Previ
 - Once you are ready to publish, use the same [rake commands](#deploy) for publish like you did initially.
 
 HTH
+
+**Edit** 2013-01-03:
+
+I has come to my attention that `rvm` is already installed on VM, which is also used to [change ruby version in environment](#rbenv). By using `rvm`, you can preserve disk space on VM.
+[Documentation for using `rvm`](http://octopress.org/docs/setup/rvm/).
