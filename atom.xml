@@ -4,7 +4,7 @@
   <title><![CDATA[Andrija's Blog]]></title>
   <link href="http://andrijac.github.io//atom.xml" rel="self"/>
   <link href="http://andrijac.github.io//"/>
-  <updated>2013-12-26T09:30:51+00:00</updated>
+  <updated>2014-01-03T11:18:20+00:00</updated>
   <id>http://andrijac.github.io//</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
@@ -126,7 +126,8 @@ I figured I could have an always Octopress ready environment on Nitrous.IO. This
 </span><span class='line'># ruby 2.0.0p247 (2013-06-27 revision 41674) [x86_64-linux]</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Ruby version required for Octopress is 1.9.3. So, we need to change a Ruby version. I used <code>rbenv</code>:</p>
+<p><a name="rbenv"></a>
+Ruby version required for Octopress is 1.9.3. So, we need to change a Ruby version. I used <code>rbenv</code>:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -269,6 +270,11 @@ Github recommends HTTPS over SSH, <a href="http://stackoverflow.com/a/11041782/8
 
 
 <p>HTH</p>
+
+<p><strong>Edit</strong> 2013-01-03:</p>
+
+<p>I has come to my attention that <code>rvm</code> is already installed on VM, which is also used to <a href="#rbenv">change ruby version in environment</a>. By using <code>rvm</code>, you can preserve disk space on VM.
+<a href="http://octopress.org/docs/setup/rvm/">Documentation for using <code>rvm</code></a>.</p>
 ]]></content>
   </entry>
   
