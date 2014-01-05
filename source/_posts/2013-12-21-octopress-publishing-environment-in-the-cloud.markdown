@@ -206,5 +206,5 @@ HTH
 
 **Edit** 2013-01-03:
 
-I has come to my attention that `rvm` is already installed on VM, which is also used to [change ruby version in environment](#rbenv). By using `rvm`, you can preserve disk space on VM.
+It has come to my attention that `rvm` is already installed on VM, which is also used to [change ruby version in environment](#rbenv). By using `rvm`, you can preserve disk space on VM.
 [Documentation for using `rvm`](http://octopress.org/docs/setup/rvm/).
