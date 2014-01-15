@@ -12,7 +12,7 @@ footer: true
 - [gifctrl.com](http://gifctrl.com/) - gif control
 - [rainymood.com](http://www.rainymood.com/) - rain sound
 - [coding.fm](http://coding.fm/) - keyboard typing sound
-- [hyperpolyglot.org](hyperpolyglot.org) - comparison of programming languages
+- [hyperpolyglot.org](http://hyperpolyglot.org) - comparison of programming languages
 - [echojs.com](http://www.echojs.com/) - hacker-news-like javascript news
 - [colorschemedesigner.com](http://colorschemedesigner.com/) - color scheme designer (doh!)
 - [gskinner.com/RegExr/](http://gskinner.com/RegExr/) - regex playground
