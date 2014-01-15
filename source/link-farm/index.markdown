@@ -15,12 +15,19 @@ footer: true
 - [coding.fm](http://coding.fm/) - keyboard typing sound
 - [explainshell.com](http://explainshell.com/) - Shell reference
 - [dochub.io](http://dochub.io/) - Web stack documentation
+- [HTML4-HTML5 diff](http://www.w3.org/TR/html5-diff/#new-elements)
 - [hyperpolyglot.org](http://hyperpolyglot.org) - comparison of programming languages
 - [echojs.com](http://www.echojs.com/) - hacker-news-like javascript news
+- <a href="http://naspinski.net/post/inline-aspnet-tags-sorting-them-all-out-(3c25242c-3c253d2c-3c252c-3c252c-etc).aspx">inline asp.net tags explained</a>
 - [noexcuselist.com](http://www.noexcuselist.com/) - no excuses anymore not to learn stuff
 - [colorschemedesigner.com](http://colorschemedesigner.com/) - color scheme designer (doh!)
 - [gskinner.com/RegExr/](http://gskinner.com/RegExr/) - regex playground
 - [refiddle.com](http://refiddle.com/) - regex fiddler
+- [sqlfiddle.com](http://sqlfiddle.com/) - SQL fiddler
+- [compilify.net](https://compilify.net/) - C# fiddler
+- [jsonformatter.curiousconcept.com](http://jsonformatter.curiousconcept.com/) - JSON formatter and validator
+- [www.mrdoob.com/projects/harmony/](http://www.mrdoob.com/projects/harmony/) - Harmony project - drawing on web canvas
+- [identitysafe.norton.com/password-generator/](https://identitysafe.norton.com/password-generator/) - password generator
 - [geoiptool.com](http://www.geoiptool.com/) - IP address lookup with Google Maps
 - [icanhazip.com](http://icanhazip.com/) - I can haz ip?
 - [youtube-mp3.org](http://www.youtube-mp3.org/) - convert YouTube video to mp3
