@@ -14,7 +14,9 @@ footer: true
 - [rainymood.com](http://www.rainymood.com/) - rain sound
 - [coding.fm](http://coding.fm/) - keyboard typing sound
 - [explainshell.com](http://explainshell.com/) - Shell reference
+- [ss64.com/nt/](http://ss64.com/nt/) - Windows cmd reference
 - [dochub.io](http://dochub.io/) - Web stack documentation
+- [bonsaiden.github.io/JavaScript-Garden](http://bonsaiden.github.io/JavaScript-Garden) - javascript reference
 - [overapi.com](http://overapi.com) - *collecting all cheat sheets*
 - [HTML4-HTML5 diff](http://www.w3.org/TR/html5-diff/#new-elements)
 - [hyperpolyglot.org](http://hyperpolyglot.org) - comparison of programming languages
