@@ -38,8 +38,15 @@ Also, I wanted to have control where will code break, so I was then forced to go
 
 Breakpoint
 -
-Goal of script that I wrote was to set breakpoint before call of any function that is accessable from global object, for example:
+Goal is to make a function is to set breakpoint before call of any function that is accessable from global object.
 
+Function needs to do following:
+
+- Cache a original function
+- Override original function with wrapper.
+- Option to restore original function.
+
+Let's say we have following object structure:
 ```javascript
 var foo = {};
 
@@ -65,8 +72,9 @@ function wrapper() {
 But wrapper needs to be also called `foo.bar.func`, because if function is called it has to actually call wrapper.
 But if function is set to `foo.bar.func`, it means it will override the original function, so we need "save" function on some other place.
 
-So how to "save" a function?
-I could use a variable and set function to it, but I need function by name for reasons you will see further down the post.
+So how to cache a function?
+I could use a variable and set function pointer to it, but I will be passing (in our function) function name that I want to break instead of function directly as I will need a key to reference back to saved function.
+You will see what I mean as I go further in post. I might change this in the future and have direct reference to function.
 Ok, as I have only function name, only way I found, at the moment, to call a function was by compiling a new Function object that calls a function.
 You could easily call a global function by name through `window` object (in browser):
 
@@ -84,13 +92,86 @@ var func_reference = (new Function("return " + func_name + ";"))();
 
 Compile a new Function that is returning a pointer to function and execute it.
 
+Now we have original function pointer assigned to variable and we can override function with wrapper.
+Wrapper should look like this:
+```javascript
+function wrapper() {
+  // Convert arguments to array
+  var args = Array.prototype.slice.call(arguments);
+  
+  // Break before original function call
+  debugger;
+  
+  // Call a function, 'this' should be the same as it would be in original function since wrapper replaced original function.
+  // We will always return result from original function.
+  return original_function.apply(this, args);
+}
+```
 
-function name because of cache key, and to access the function.
+Override function:
+```javascript
+var override = new Function("overrideFunc", funcName + " = overrideFunc;");
+```
 
+Finally, "breakpoint" function:
 
+```javascript
+		var __break = (function () {
+			"use strict";
+      
+			// as we need to keep original functions, we will use clousers to keep a original functions here.
+			var cache = {}, 
+				cArray = function (args) { return Array.prototype.slice.call(args); },
+				concat = function () { return cArray(arguments).join(""); };
+        
+			// funcName - name of the function, full name accessable from global object.
+			// removeBreakpoint - use it only when you want to remove a breakpoint, set it to any truthful value.
+			return function (funcName, removeBreakpoint) {
 
+				// get pointer to original function
+				var original = (new Function(concat("return ", funcName, ";")))(),
+				// compile override function
+					override = new Function("overrideFunc", concat(funcName, " = overrideFunc;"));
+        
+				// check removeBreakpoint flag if it is true.        
+				if (!!removeBreakpoint) {
+					// restore original function
+					override(cache[funcName]);
+					// remove from cached collection
+					delete cache[funcName];
+					return;
+				}
+        
+				// if function is already overriden, exit
+				if (!!cache[funcName]) {
+					return;
+				}
+        
+				// cache original function
+				cache[funcName] = original;
+        
+				// override original function
+				override(function () {
+					var args = cArray(arguments);
+					debugger;
+					return original.apply(this, args);
+				});
+			};
+		} ());
+```
 
+To set the breakpoint:
+```javascript
+__break('foo.bar.func');
+```
+To remove the breakpoint:
+```javascript
+__break('foo.bar.func', true);
+```
 
+Potentially, we could add this function to `console` object:
+```javascript
+console.break = __break;
+```
 
-
-
+HTH
