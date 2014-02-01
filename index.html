@@ -9,8 +9,7 @@
   <meta name="author" content="Andrija Cacanovic">
 
   
-  <meta name="description" content="I was looking for a blog platform: Good support for developers (sharing code snippets and github gists).
-Highly customizable layout &ndash; I don& &hellip;">
+  <meta name="description" content="This post will describe how to set breakpoint in before any javascript method call from console. GitHub repository: https://github.com/andrijac/break &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,334 @@ Highly customizable layout &ndash; I don& &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/31/javascript-breakpoint/">Javascript Breakpoint</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-31T09:44:00+00:00" pubdate data-updated="true">Jan 31<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This post will describe how to set breakpoint in before any javascript method call from console.</p>
+
+<ul>
+<li>GitHub repository: <a href="https://github.com/andrijac/break-js">https://github.com/andrijac/break-js</a></li>
+<li>break.js: <a href="https://github.com/andrijac/break-js/blob/master/break.js">https://github.com/andrijac/break-js/blob/master/break.js</a></li>
+<li>break.min.js: <a href="https://github.com/andrijac/break-js/blob/master/break.min.js">https://github.com/andrijac/break-js/blob/master/break.min.js</a></li>
+</ul>
+
+
+<p>In post:</p>
+
+<ul>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#break">&ldquo;Break&rdquo; Function</a></li>
+<li><a href="#usage">Usage</a></li>
+</ul>
+
+
+<h2>TL;DR</h2>
+
+<h2>Background <a name="background" href="#background" class="anchor">#</a></h2>
+
+<p>To make a long story short, I was working on a big single page web application a year ago, with huge javascript code base.
+Whenever I wanted to set a breakpoint in editor/dev tools/firebug, it took time to find the function.
+Either because it took time for source viewer to load (because of huge javascript files), or to locate in which file is function of interest.</p>
+
+<p>So I have started inserting <code>debugger;</code> directive to my scripts when I need to break.
+The problem was, then I wanted to remove the directive, I had find the directive, remove it or comment it out, and to reload the page, but as we were working on SPA, I basically had to restart my debugging sessions.
+I also tried to make a global flag, and based on flag to set enable the debugger:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">IS_DEBUGGER_ENABLED</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">breakpoint</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">IS_DEBUGGER_ENABLED</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">debugger</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Whenever I wanted to turn debugger on, I could just set in console:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">IS_DEBUGGER_ENABLED</span> <span class="o">=</span> <span class="kc">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Problem was I did not really like to have this function call all over the code.
+Also, I wanted to have control where will code break, so I was then forced to go back and remove <code>breakpoint()</code> calls.</p>
+
+<h2>Implementation <a name="implementation" href="#implementation" class="anchor">#</a></h2>
+
+<p>The goal is to make a function that can insert a breakpoint before the call of any function we are interested in, which is accessible from global object.</p>
+
+<p>Function needs to do following:</p>
+
+<ul>
+<li>Save reference to original function</li>
+<li>Override original function with wrapper.</li>
+<li>Option to restore original function and remove breakpoint.</li>
+</ul>
+
+
+<p>Let&rsquo;s say we have following object structure:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">foo</span><span class="p">.</span><span class="nx">bar</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">foo</span><span class="p">.</span><span class="nx">bar</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Path to <code>func</code> function is through <code>foo.bar.func</code>.
+This is usually a case in huge javascript libraries such as Ext.js (Sencha), YUI etc.</p>
+
+<p>To be able to set breakpoint, I would need to set <code>debugger;</code> right before <code>foo.bar.func</code> call.</p>
+
+<p>So, I thought it would be nice to wrap <code>foo.bar.func</code> function in new function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">wrapper</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kr">debugger</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">foo</span><span class="p">.</span><span class="nx">bar</span><span class="p">.</span><span class="nx">func</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But wrapper also needs to be called <code>foo.bar.func</code>, because if function is called it has to actually call wrapper.
+But if wrapper is set to <code>foo.bar.func</code>, it means it will override the original function, so we need save a reference to original function somewhere.</p>
+
+<p>How to save a reference to a function? <br />
+I could pass into wrapper a direct reference to function and assign it to variable, but instead I am passing in a function name. The reason for this is because I need to access a function dynamically and also I will need a key to reference back to original function.
+You will see what I mean as I go further in post. I might change this in the future and be able to pass direct reference to function in wrapper.
+Ok, as I have only function name, only way I found (at the moment) to call a function was by compiling a new Function object that calls a function.
+You could easily call a global function by name through <code>window</code> object (in browser):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">window</span><span class="p">[</span><span class="s1">&#39;function_name&#39;</span><span class="p">](</span><span class="nx">parameters</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works if function is on global object, but if function in inside another object, this will not work.
+So, to invoke <code>foo.bar.func</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">func_name</span> <span class="o">=</span> <span class="s1">&#39;foo.bar.func&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Compile a new Function that is returning a reference to function and execute it.</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">func_reference</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Function</span><span class="p">(</span><span class="s2">&quot;return &quot;</span> <span class="o">+</span> <span class="nx">func_name</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span><span class="p">))();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we have original function reference assigned to variable and we can override function with wrapper.
+Wrapper should look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">wrapper</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Convert arguments to array</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Break before original function call</span>
+</span><span class='line'>  <span class="kr">debugger</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Call a function.</span>
+</span><span class='line'>  <span class="c1">// &#39;this&#39; should be the same as it would be in original function since wrapper replaced original function.</span>
+</span><span class='line'>  <span class="c1">// We will always return result from original function.</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">original_function</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Override function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">override</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Function</span><span class="p">(</span><span class="s2">&quot;overrideFunc&quot;</span><span class="p">,</span> <span class="nx">funcName</span> <span class="o">+</span> <span class="s2">&quot; = overrideFunc;&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>&ldquo;Break&rdquo; function <a name="break" href="#break" class="anchor">#</a></h2>
+
+<p>Finally, &ldquo;break&rdquo; function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">__break</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// as we need to keep original functions, we will use clousers to keep a original functions here.</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">cache</span> <span class="o">=</span> <span class="p">{},</span>
+</span><span class='line'>      <span class="nx">cArray</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span> <span class="p">},</span>
+</span><span class='line'>      <span class="nx">concat</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">cArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span> <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// funcName - name of the function, full name accessable from global object.</span>
+</span><span class='line'>  <span class="c1">// removeBreakpoint - use it only when you want to remove a breakpoint, set it to any truthful value.</span>
+</span><span class='line'>  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">funcName</span><span class="p">,</span> <span class="nx">removeBreakpoint</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// get reference to original function</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">original</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Function</span><span class="p">(</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;return &quot;</span><span class="p">,</span> <span class="nx">funcName</span><span class="p">,</span> <span class="s2">&quot;;&quot;</span><span class="p">)))(),</span>
+</span><span class='line'>          <span class="c1">// compile override function</span>
+</span><span class='line'>          <span class="nx">override</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Function</span><span class="p">(</span><span class="s2">&quot;overrideFunc&quot;</span><span class="p">,</span> <span class="nx">concat</span><span class="p">(</span><span class="nx">funcName</span> <span class="p">,</span> <span class="s2">&quot; = overrideFunc;&quot;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// check removeBreakpoint flag if it is true.</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="o">!!</span><span class="nx">removeBreakpoint</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// restore original function</span>
+</span><span class='line'>          <span class="nx">override</span><span class="p">(</span><span class="nx">cache</span><span class="p">[</span><span class="nx">funcName</span><span class="p">]);</span>
+</span><span class='line'>          <span class="c1">// remove from cached collection</span>
+</span><span class='line'>          <span class="k">delete</span> <span class="nx">cache</span><span class="p">[</span><span class="nx">funcName</span><span class="p">];</span>
+</span><span class='line'>          <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// if function is already overriden, exit</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="o">!!</span><span class="nx">cache</span><span class="p">[</span><span class="nx">funcName</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// cache original function</span>
+</span><span class='line'>      <span class="nx">cache</span><span class="p">[</span><span class="nx">funcName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">original</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// override original function</span>
+</span><span class='line'>      <span class="nx">override</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">cArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+</span><span class='line'>          <span class="kr">debugger</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">return</span> <span class="nx">original</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">}());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Usage <a name="usage" href="#usage" class="anchor">#</a></h2>
+
+<p>To set the breakpoint:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">__break</span><span class="p">(</span><span class="s1">&#39;foo.bar.func&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To remove the breakpoint:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">__break</span><span class="p">(</span><span class="s1">&#39;foo.bar.func&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Potentially, we could add this function to <code>console</code> object:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">console</span><span class="p">.</span><span class="k">break</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="k">break</span> <span class="o">=</span> <span class="nx">__break</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Repository is at: <a href="https://github.com/andrijac/break-js">https://github.com/andrijac/break-js</a></p>
+
+<p>HTH</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -485,6 +812,10 @@ hg push
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/31/javascript-breakpoint/">Javascript Breakpoint</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/12/21/octopress-publishing-environment-in-the-cloud/">Octopress Publishing Environment in the Cloud</a>
