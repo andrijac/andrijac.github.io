@@ -8,6 +8,12 @@ categories:
 
 This post will describe how to set breakpoint in before any javascript method call from console. 
 
+- GitHub repository: [https://github.com/andrijac/break-js](https://github.com/andrijac/break-js)
+- break.js: [https://github.com/andrijac/break-js/blob/master/break.js](https://github.com/andrijac/break-js/blob/master/break.js)
+- break.min.js: [https://github.com/andrijac/break-js/blob/master/break.min.js](https://github.com/andrijac/break-js/blob/master/break.min.js)
+
+###TL;DR
+
 Background
 -
 
@@ -16,7 +22,7 @@ Whenever I wanted to set a breakpoint in editor/dev tools/firebug, it took time 
 Either because it took time for source viewer to load (because of huge javascript files), or to locate in which file is function of interest.
 
 So I have started inserting `debugger;` directive to my scripts when I need to break. 
-The problem was, then I wanted to remove the directive, I had find the directive, remove it or comment it out, and to reload the page, but as we were working on SPA, I basically had to start again.
+The problem was, then I wanted to remove the directive, I had find the directive, remove it or comment it out, and to reload the page, but as we were working on SPA, I basically had to restart my debugging sessions.
 I also tried to make a global flag, and based on flag to set enable the debugger:
 
 ```javascript
@@ -33,12 +39,12 @@ When ever I wanted to turn debugger on, I could just set in console:
 IS_DEBUGGER_ENABLED = true
 ```
 
-Problem was, I did not really like to have this code all over code. 
+Problem was I did not really like to have this function call all over the code. 
 Also, I wanted to have control where will code break, so I was then forced to go back and remove `breakpoint()` calls.
 
 Breakpoint
 -
-Goal is to make a function is to set breakpoint before call of any function that is accessable from global object.
+The goal is to make a function that can insert a breakpoint before the call of any function we are interested in, that is accessable from global object.
 
 Function needs to do following:
 
@@ -59,7 +65,7 @@ foo.bar.func = function () {
 Path to `func` function is through `foo.bar.func`.
 This is usually a case in huge javascript libraries such as Ext.js (Sencha), YUI etc.
 
-To be able to set breakpoint, I would need to set `debugger;` right before `foo.bar.func`.
+To be able to set breakpoint, I would need to set `debugger;` right before `foo.bar.func` call.
 
 So, I thought it would be nice to wrap `foo.bar.func` function in new function:
 
@@ -69,13 +75,14 @@ function wrapper() {
   foo.bar.func();
 }
 ```
-But wrapper needs to be also called `foo.bar.func`, because if function is called it has to actually call wrapper.
-But if function is set to `foo.bar.func`, it means it will override the original function, so we need "save" function on some other place.
+But wrapper also needs to be called `foo.bar.func`, because if function is called it has to actually call wrapper.
+But if wrapper is set to `foo.bar.func`, it means it will override the original function, so we need save a reference to original function somewhere.
 
-So how to cache a function?
-I could use a variable and set function pointer to it, but I will be passing (in our function) function name that I want to break instead of function directly as I will need a key to reference back to saved function.
-You will see what I mean as I go further in post. I might change this in the future and have direct reference to function.
-Ok, as I have only function name, only way I found, at the moment, to call a function was by compiling a new Function object that calls a function.
+So how to save a reference to a function?
+// TODO: fix pointer remark
+I could use a variable and set function pointer to it, but in wrapper I will be passing function name that I want to break instead of function directly. The reason for this is because I need to access a function dinamically and also I will need a key to reference back to original function.
+You will see what I mean as I go further in post. I might change this in the future and be able to pass direct reference to function in wrapper.
+Ok, as I have only function name, only way I found (at the moment) to call a function was by compiling a new Function object that calls a function.
 You could easily call a global function by name through `window` object (in browser):
 
 ```javascript
@@ -87,12 +94,12 @@ So, to invoke `foo.bar.func`:
 
 ```javascript
 var func_name = 'foo.bar.func';
+
+// Compile a new Function that is returning a reference to function and execute it.
 var func_reference = (new Function("return " + func_name + ";"))();
 ```
 
-Compile a new Function that is returning a pointer to function and execute it.
-
-Now we have original function pointer assigned to variable and we can override function with wrapper.
+Now we have original function reference assigned to variable and we can override function with wrapper.
 Wrapper should look like this:
 ```javascript
 function wrapper() {
@@ -102,7 +109,8 @@ function wrapper() {
   // Break before original function call
   debugger;
   
-  // Call a function, 'this' should be the same as it would be in original function since wrapper replaced original function.
+  // Call a function.
+  // 'this' should be the same as it would be in original function since wrapper replaced original function.
   // We will always return result from original function.
   return original_function.apply(this, args);
 }
@@ -173,5 +181,7 @@ Potentially, we could add this function to `console` object:
 ```javascript
 console.break = __break;
 ```
+
+Repository is at: [https://github.com/andrijac/break-js](https://github.com/andrijac/break-js)
 
 HTH
