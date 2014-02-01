@@ -12,7 +12,13 @@ This post will describe how to set breakpoint in before any javascript method ca
 - break.js: [https://github.com/andrijac/break-js/blob/master/break.js](https://github.com/andrijac/break-js/blob/master/break.js)
 - break.min.js: [https://github.com/andrijac/break-js/blob/master/break.min.js](https://github.com/andrijac/break-js/blob/master/break.min.js)
 
-###TL;DR
+In post:
+
+- [Implementation](#implementation)
+- ["Break" Function](#break)
+- [Usage](#usage)
+
+##TL;DR
 
 Background <a name="background" href="#background" class="anchor">#</a>
 -
@@ -44,11 +50,11 @@ Also, I wanted to have control where will code break, so I was then forced to go
 
 Implementation <a name="implementation" href="#implementation" class="anchor">#</a>
 -
-The goal is to make a function that can insert a breakpoint before the call of any function we are interested in, that is accessable from global object.
+The goal is to make a function that can insert a breakpoint before the call of any function we are interested in, which is accessible from global object.
 
 Function needs to do following:
 
-- Cache a original function
+- Save reference to original function
 - Override original function with wrapper.
 - Option to restore original function and remove breakpoint.
 
@@ -78,8 +84,8 @@ function wrapper() {
 But wrapper also needs to be called `foo.bar.func`, because if function is called it has to actually call wrapper.
 But if wrapper is set to `foo.bar.func`, it means it will override the original function, so we need save a reference to original function somewhere.
 
-So how to save a reference to a function? <br />
-I could pass into wrapper a direct reference to function and assign it to variable, but instead I am passing in a function name. The reason for this is because I need to access a function dinamically and also I will need a key to reference back to original function.
+How to save a reference to a function? <br />
+I could pass into wrapper a direct reference to function and assign it to variable, but instead I am passing in a function name. The reason for this is because I need to access a function dynamically and also I will need a key to reference back to original function.
 You will see what I mean as I go further in post. I might change this in the future and be able to pass direct reference to function in wrapper.
 Ok, as I have only function name, only way I found (at the moment) to call a function was by compiling a new Function object that calls a function.
 You could easily call a global function by name through `window` object (in browser):
@@ -88,7 +94,7 @@ You could easily call a global function by name through `window` object (in brow
 window['function_name'](parameters);
 ```
 
-This works if function is on global object, but if function in inside an other object, this will not work.
+This works if function is on global object, but if function in inside another object, this will not work.
 So, to invoke `foo.bar.func`:
 
 ```javascript
