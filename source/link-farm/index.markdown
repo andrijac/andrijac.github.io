@@ -13,8 +13,10 @@ footer: true
 - [volafile.io](http://volafile.io) - realtime file sharing
 - [rainymood.com](http://www.rainymood.com/) - rain sound
 - [coding.fm](http://coding.fm/) - keyboard typing sound
+- [tldrlegal.com](https://tldrlegal.com/) - TL;DR Software license reference
 - [explainshell.com](http://explainshell.com/) - Shell reference
-- [ss64.com/nt/](http://ss64.com/nt/) - Windows cmd reference
+- [ss64.com/nt/](http://ss64.com/nt/) - Windows command reference
+- [ss64.com/bash/](http://ss64.com/bash/) - Bash command reference
 - [dochub.io](http://dochub.io/) - Web stack documentation
 - [bonsaiden.github.io/JavaScript-Garden](http://bonsaiden.github.io/JavaScript-Garden) - javascript reference
 - [overapi.com](http://overapi.com) - *collecting all cheat sheets*
@@ -41,6 +43,8 @@ footer: true
 - [download-chromium.appspot.com](http://download-chromium.appspot.com) - chromium download for windows from trunk
 - [NetShareMonitor](http://securityxploded.com/netsharemonitor.php) - *"Net Share Monitor is the free software to Monitor your Shared Files from unknown users in the network."*]
 - [nimbletext.com](http://nimbletext.com/) - templating
+- [nirsoft.net/utils/cports.html](http://www.nirsoft.net/utils/cports.html) - CurrPorts - Monitoring Opened TCP/IP network ports / connections
+- [iconico.com/colorpic/](http://www.iconico.com/colorpic/) - ColorPic
 - [noexcuselist.com](http://www.noexcuselist.com/) - no excuses anymore not to learn stuff
 - [thekidshouldseethis.com](http://thekidshouldseethis.com/) - *Not-made-for-kids videos that you can watch with your kids.*
 
