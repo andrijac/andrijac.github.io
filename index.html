@@ -9,7 +9,8 @@
   <meta name="author" content="Andrija Cacanovic">
 
   
-  <meta name="description" content="This post will describe how to set breakpoint in before any javascript method call from console. GitHub repository: https://github.com/andrijac/break &hellip;">
+  <meta name="description" content="I had a requirement to read multiple files in one go in Node.js project. Requirement: Read UTF8 files asynchronously.
+Notify when each file read is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,383 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/08/read-multiple-files-in-node-dot-js/">Read Multiple Files in node.js</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-08T05:09:00+00:00" pubdate data-updated="true">May 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I had a requirement to read multiple files in one go in Node.js project.</p>
+
+<p>Requirement:</p>
+
+<ul>
+<li>Read UTF8 files asynchronously.</li>
+<li>Notify when each file read is done.</li>
+<li>Notify when reading all files is done.</li>
+</ul>
+
+
+<p>I have found few examples on Stackoverflow:</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/9618142/asynchronously-reading-and-caching-multiple-files-in-nodejs">Asynchronously reading and caching multiple files in nodejs</a></li>
+<li><a href="http://stackoverflow.com/questions/9448336/reading-and-returning-multiple-files-in-node-js-using-fs-readfile">Reading and returning multiple files in Node.js using fs.readFile</a></li>
+</ul>
+
+
+<p>In both cases answer was to use either <a href="https://github.com/caolan/async"><code>async</code></a> library or to just use native node.js functions.</p>
+
+<p>I don&rsquo;t like using external library and I am trying to use native/vanilla as much as possible. If there is one small part of external/third-party library that I have to use, I&rsquo;d rather write my own. For example, if I have to get reference to DOM element by <code>id</code> on web page, I&rsquo;d avoid using jQuery. If I would have to heavily traverse the DOM then I would definitely use jQuery.</p>
+
+<p>So, I will skip using <code>async</code> library and use only native functions.</p>
+
+<p>Here is complete code that we will go through:</p>
+
+<p><em>Latest version of file is in repository on Github: <a href="https://github.com/andrijac/multiple-file-read/blob/master/MultipleFileRead/MultipleFileRead/multiread.js">multiread.js</a></em></p>
+
+<figure class='code'><figcaption><span>multiread.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>   <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">),</span>
+</span><span class='line'>          <span class="nx">readline</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;readline&#39;</span><span class="p">),</span>
+</span><span class='line'>          <span class="nx">filePathList</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">ii</span><span class="p">,</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="nx">toArray</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="p">},</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="nx">rl</span> <span class="o">=</span> <span class="nx">readline</span><span class="p">.</span><span class="nx">createInterface</span><span class="p">({</span>
+</span><span class='line'>              <span class="nx">input</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">stdin</span><span class="p">,</span>
+</span><span class='line'>              <span class="nx">output</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">stdout</span>
+</span><span class='line'>          <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">// validate call, must contain at least 3 arguments</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">wl</span><span class="p">(</span><span class="s2">&quot;Usage: node multiread.js [file paths to read]&quot;</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">// start from 3rd argument, add them to filePathList</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">ii</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">ii</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">filePathList</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">getActualFilePath</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="nx">i</span><span class="p">]));</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">// check file path</span>
+</span><span class='line'>      <span class="kd">function</span> <span class="nx">getActualFilePath</span><span class="p">(</span><span class="nx">filePath</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">relative</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="c1">// check absolute path</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span><span class="nx">filePath</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="nx">filePath</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="c1">// get absolute path from relative path</span>
+</span><span class='line'>          <span class="nx">relative</span> <span class="o">=</span> <span class="p">[</span><span class="nx">__dirname</span><span class="p">,</span> <span class="nx">filePath</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="c1">// check relative path</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span><span class="nx">relative</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="nx">relative</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;File &quot;</span> <span class="o">+</span> <span class="nx">filePath</span> <span class="o">+</span> <span class="s2">&quot; not found&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="cm">/**</span>
+</span><span class='line'><span class="cm">      * @param execFunc {Function} Function that will be called for each argument set in @args array.</span>
+</span><span class='line'><span class="cm">      * @param args {Object[]} Array where each item is array objects which will be used in each call.</span>
+</span><span class='line'><span class="cm">      * @param eachCallback {Function} Callback after each execution.</span>
+</span><span class='line'><span class="cm">      * @param callback {Function} Callback when all arguments are processed.</span>
+</span><span class='line'><span class="cm">      */</span>
+</span><span class='line'>      <span class="kd">function</span> <span class="nx">batch</span><span class="p">(</span><span class="nx">execFunc</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">eachCallback</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">iterate</span><span class="p">,</span> <span class="nx">results</span><span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="nx">cb</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">callResult</span> <span class="o">=</span> <span class="nx">toArray</span><span class="p">(</span><span class="nx">arguments</span><span class="p">),</span>
+</span><span class='line'>                  <span class="nx">isLastItem</span> <span class="o">=</span> <span class="nx">index</span> <span class="o">==</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>              <span class="c1">// put results from callback to results list for later processing</span>
+</span><span class='line'>              <span class="c1">// results list is passed into final callback function</span>
+</span><span class='line'>              <span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">callResult</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>              <span class="c1">// notify that current call is done</span>
+</span><span class='line'>              <span class="nx">eachCallback</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">callResult</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>              <span class="k">if</span><span class="p">(</span><span class="nx">isLastItem</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="c1">// if it is last item in args array, call final callback</span>
+</span><span class='line'>                  <span class="nx">callback</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+</span><span class='line'>              <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="c1">// continue iteration through args</span>
+</span><span class='line'>                  <span class="nx">iterate</span><span class="p">();</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">};</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="nx">iterate</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nx">index</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">index</span><span class="p">,</span>
+</span><span class='line'>                  <span class="nx">argsArray</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">||</span> <span class="p">[];</span>
+</span><span class='line'>  
+</span><span class='line'>              <span class="c1">// &#39;argsArray&#39; collection was created in &#39;batchRead&#39; method and it contains all arguments needed to invoke a function</span>
+</span><span class='line'>              <span class="c1">// here we are adding last argument in collection which is callback function &#39;cb&#39; which is scoped inside parent function</span>
+</span><span class='line'>              <span class="c1">// inside &#39;cb&#39; function iterate function will be called again until all arguments are not processed.</span>
+</span><span class='line'>              <span class="nx">argsArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">cb</span><span class="p">);</span>
+</span><span class='line'>              <span class="nx">execFunc</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">argsArray</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">};</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="c1">// first iteration call</span>
+</span><span class='line'>          <span class="nx">iterate</span><span class="p">();</span>
+</span><span class='line'>      <span class="p">};</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="cm">/**</span>
+</span><span class='line'><span class="cm">      * @param files {string[]} File path list.</span>
+</span><span class='line'><span class="cm">      * @param eachCallback {Function} Callback after each execution.</span>
+</span><span class='line'><span class="cm">      * @param callback {Function} Callback when all arguments are processed.</span>
+</span><span class='line'><span class="cm">      */</span>
+</span><span class='line'>      <span class="kd">function</span> <span class="nx">batchRead</span><span class="p">(</span><span class="nx">files</span><span class="p">,</span> <span class="nx">eachCallback</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nx">args</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="c1">// build args array</span>
+</span><span class='line'>          <span class="nx">files</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nx">args</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">file</span><span class="p">,</span> <span class="nx">encoding</span><span class="p">]);</span>
+</span><span class='line'>          <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="nx">batch</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">eachCallback</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="nx">batchRead</span><span class="p">(</span><span class="nx">filePathList</span><span class="p">,</span>
+</span><span class='line'>          <span class="c1">// callback after each file read</span>
+</span><span class='line'>          <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;File read done. Text: &quot;</span> <span class="o">+</span> <span class="nx">text</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">},</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="c1">// callback when everything is done</span>
+</span><span class='line'>          <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="kd">var</span> <span class="nx">insertTextArr</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>  
+</span><span class='line'>              <span class="nx">result</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                  <span class="nx">insertTextArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span><span class='line'>              <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+</span><span class='line'>              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;All:&quot;</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">insertTextArr</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">));</span>
+</span><span class='line'>          <span class="p">});</span>
+</span><span class='line'>  
+</span><span class='line'>      <span class="c1">// wait in console</span>
+</span><span class='line'>      <span class="nx">rl</span><span class="p">.</span><span class="nx">question</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="nx">rl</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span> <span class="p">});</span>
+</span><span class='line'>  <span class="p">})();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>TL;DR</h2>
+
+<h3><code>batch</code> function</h3>
+
+<p>The idea behind <code>batch</code> function was to have generic function that will execute array of asynchronous functions and wait for them to finish, something like what <code>async</code> doing, as long as signature of function is <code>function([parameters], callback)</code>.</p>
+
+<p>Parameter description:</p>
+
+<ol>
+<li><code>execFunc</code> &ndash; function that is suppose to be executed for each argument set. In this case <code>execFunc</code> is <code>fs.readFile</code>.</li>
+<li><code>args</code> &ndash; array of &lsquo;argument sets&rsquo; for each execution => &lsquo;argument set&rsquo; is array of arguments without callback. In this case, set contains file path and encoding.</li>
+<li><code>eachCallback</code> &ndash; callback for each <code>execFunc</code> call.</li>
+<li><code>callback</code> &ndash; callback when all is done.</li>
+</ol>
+
+
+<p>Inside <code>batch</code> function there are two functions: <code>cb</code> and <code>iterate</code>.</p>
+
+<p><code>iterate</code> function does actual call to <code>execFunc</code>. It will add <code>cb</code> function to collection arguments at last position to act as actual callback of <code>execFunc</code>. This way we control each callback of <code>execFunc</code> and notify outside world when we want that it&rsquo;s all done. Also, this method will queue execution of asynchronous functions i.e. making them execute sequentially.</p>
+
+<p><code>cb</code> function is a <code>execFunc</code> callback. As arguments of function are actual result of <code>execFunc</code> execution, this is the place where we will catch it.<br />
+In <code>batch</code> function level, there is <code>results</code> array that will hold all results returned from <code>execFunc</code> executions. This array will be an argument for final callback call. <code>results</code> array is populated here on each call. <br />
+Then, we will call <code>eachCallback</code> function to notify outside world that execution of <code>execFunc</code> is done.<br />
+Then, we will check if this was a last <code>execFunc</code> call. If yes, call final <code>callback</code> sending all results as an argument. If no, continue iteration.</p>
+
+<h3><code>batchRead</code> function</h3>
+
+<p><code>batchRead</code> function wrapping a call to <code>batch</code> function to simplify call to generic <code>batch</code> function.</p>
+
+<p>Parameter description:</p>
+
+<ol>
+<li><code>files</code> &ndash; array of file paths to be read.</li>
+<li><code>eachCallback</code> &ndash; callback for each <code>fs.readFile</code> call.</li>
+<li><code>callback</code> &ndash; callback when all is done.</li>
+</ol>
+
+
+<p>As <code>batch</code> function is accepting <code>object[object[]]</code> array for arguments, we need to repack file paths array to new array. Also, in each of these arrays, we will add additional argument => <code>utf8</code>. <br />
+Then, we are calling <code>batch</code> function with all appropriate arguments.</p>
+
+<h3><code>batchRead</code> call</h3>
+
+<p>At the end, we will call <code>batchRead</code>. <code>eachCallback</code> should have same signature as you would use when calling <code>fs.readFile</code>.</p>
+
+<h2>Summary</h2>
+
+<p>If you have to call same function with different arguments several times, queue each call and have final callback, you can use <code>batch</code> function. <code>batchRead</code> shows how <code>batch</code> function can be utilized by reading multiple files sequentially and notifying the application when all is done.</p>
+
+<p>HTH</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -814,6 +1192,10 @@ hg push
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/08/read-multiple-files-in-node-dot-js/">Read Multiple Files in node.js</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/01/31/javascript-breakpoint/">Javascript Breakpoint</a>
       </li>
     
@@ -827,18 +1209,6 @@ hg push
     
   </ul>
 </section>
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/109273118141702333884?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
 
 <section>
   <h1>GitHub Repos</h1>
@@ -874,6 +1244,21 @@ hg push
      <a class="twitter-timeline" href="https://twitter.com/andrijacc" data-widget-id="459647304744448000">Tweets by @andrijacc</a>
      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
  </section>
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109273118141702333884?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<section>
+  <a href="http://stackoverflow.com/users/84852/andrija-cacanovic" class="stackoverflow_link">
+    <img src="http://stackoverflow.com/users/flair/84852.png" width="208" height="58" alt="profile for Andrija Cacanovic at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for Andrija Cacanovic at Stack Overflow, Q&amp;A for professional and enthusiast programmers">
+  </a>
+</section>
   
 </aside>
 
