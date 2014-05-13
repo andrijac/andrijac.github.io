@@ -24,6 +24,7 @@ footer: true
 - [hyperpolyglot.org](http://hyperpolyglot.org) - comparison of programming languages
 - [echojs.com](http://www.echojs.com/) - hacker-news-like javascript news
 - <a href="http://naspinski.net/post/inline-aspnet-tags-sorting-them-all-out-(3c25242c-3c253d2c-3c252c-3c252c-etc).aspx">inline asp.net tags explained</a>
+- [12factor.net](http://12factor.net/) - *"The twelve-factor app is a methodology for building software-as-a-service apps"*
 - [colorschemedesigner.com](http://colorschemedesigner.com/) - color scheme designer (doh!)
 - [www.mrdoob.com/projects/harmony/](http://www.mrdoob.com/projects/harmony/) - Harmony project - drawing on web canvas
 - [gskinner.com/RegExr/](http://gskinner.com/RegExr/) - regex playground
