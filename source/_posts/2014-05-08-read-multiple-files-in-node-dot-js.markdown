@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Read multiple files in node.js"
+title: "Read multiple files in Node.js"
 date: 2014-05-08 05:09
 comments: true
 categories: 
