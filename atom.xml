@@ -4,7 +4,7 @@
   <title><![CDATA[Andrija's Blog]]></title>
   <link href="http://andrijac.github.io//atom.xml" rel="self"/>
   <link href="http://andrijac.github.io//"/>
-  <updated>2014-05-08T14:33:09+00:00</updated>
+  <updated>2015-06-01T20:34:28+00:00</updated>
   <id>http://andrijac.github.io//</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Read multiple files in node.js]]></title>
+    <title type="html"><![CDATA[Read multiple files in Node.js]]></title>
     <link href="http://andrijac.github.io//blog/2014/05/08/read-multiple-files-in-node-dot-js/"/>
     <updated>2014-05-08T05:09:00+00:00</updated>
     <id>http://andrijac.github.io//blog/2014/05/08/read-multiple-files-in-node-dot-js</id>
