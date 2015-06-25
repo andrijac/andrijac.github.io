@@ -2,38 +2,38 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>
-            http://andrijac.github.io//blog/2013/12/02/backup-existing-project-to-cloud-source-control/
+            http://andrijac.github.io/blog/2013/12/02/backup-existing-project-to-cloud-source-control/
         </loc>
-        <lastmod>2013-12-26T09:41:48+00:00</lastmod>
+        <lastmod>2015-06-25T18:21:50+00:00</lastmod>
     </url>
     <url>
         <loc>
-            http://andrijac.github.io//blog/2013/12/21/octopress-publishing-environment-in-the-cloud/
+            http://andrijac.github.io/blog/2013/12/21/octopress-publishing-environment-in-the-cloud/
         </loc>
-        <lastmod>2014-01-05T10:50:12+00:00</lastmod>
+        <lastmod>2015-06-25T18:21:50+00:00</lastmod>
     </url>
     <url>
-        <loc>http://andrijac.github.io//blog/2014/01/31/javascript-breakpoint/</loc>
-        <lastmod>2014-02-01T11:09:12+00:00</lastmod>
+        <loc>http://andrijac.github.io/blog/2014/01/31/javascript-breakpoint/</loc>
+        <lastmod>2015-06-25T18:21:50+00:00</lastmod>
     </url>
     <url>
-        <loc>http://andrijac.github.io//blog/2014/05/08/read-multiple-files-in-node-dot-js/</loc>
-        <lastmod>2014-05-14T06:07:34+00:00</lastmod>
+        <loc>http://andrijac.github.io/blog/2014/05/08/read-multiple-files-in-node-dot-js/</loc>
+        <lastmod>2015-06-25T18:21:50+00:00</lastmod>
     </url>
     <url>
-        <loc>http://andrijac.github.io//</loc>
-        <lastmod>2014-05-14T06:07:34+00:00</lastmod>
+        <loc>http://andrijac.github.io/</loc>
+        <lastmod>2015-06-25T18:21:50+00:00</lastmod>
     </url>
     <url>
-        <loc>http://andrijac.github.io//link-farm/</loc>
-        <lastmod>2014-05-13T07:20:32+00:00</lastmod>
+        <loc>http://andrijac.github.io/link-farm/</loc>
+        <lastmod>2015-06-25T18:21:50+00:00</lastmod>
     </url>
     <url>
-        <loc>http://andrijac.github.io//robots.txt</loc>
-        <lastmod>2013-11-16T11:04:02+00:00</lastmod>
+        <loc>http://andrijac.github.io/robots.txt</loc>
+        <lastmod>2015-06-25T18:21:50+00:00</lastmod>
     </url>
     <url>
-        <loc>http://andrijac.github.io//blog/archives/</loc>
-        <lastmod>2014-05-14T06:07:34+00:00</lastmod>
+        <loc>http://andrijac.github.io/blog/archives/</loc>
+        <lastmod>2015-06-25T18:21:50+00:00</lastmod>
     </url>
 </urlset>

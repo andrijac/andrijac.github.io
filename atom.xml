@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Andrija's Blog]]></title>
-  <link href="http://andrijac.github.io//atom.xml" rel="self"/>
-  <link href="http://andrijac.github.io//"/>
-  <updated>2015-06-11T07:19:33+00:00</updated>
-  <id>http://andrijac.github.io//</id>
+  <link href="http://andrijac.github.io/atom.xml" rel="self"/>
+  <link href="http://andrijac.github.io/"/>
+  <updated>2015-06-25T19:08:35+00:00</updated>
+  <id>http://andrijac.github.io/</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Read multiple files in Node.js]]></title>
-    <link href="http://andrijac.github.io//blog/2014/05/08/read-multiple-files-in-node-dot-js/"/>
+    <link href="http://andrijac.github.io/blog/2014/05/08/read-multiple-files-in-node-dot-js/"/>
     <updated>2014-05-08T05:09:00+00:00</updated>
-    <id>http://andrijac.github.io//blog/2014/05/08/read-multiple-files-in-node-dot-js</id>
+    <id>http://andrijac.github.io/blog/2014/05/08/read-multiple-files-in-node-dot-js</id>
     <content type="html"><![CDATA[<p>I had a requirement to read multiple files in one go in Node.js project.</p>
 
 <p>Requirement:</p>
@@ -365,9 +365,9 @@ Then, we are calling <code>batch</code> function with all appropriate arguments.
   
   <entry>
     <title type="html"><![CDATA[Javascript breakpoint]]></title>
-    <link href="http://andrijac.github.io//blog/2014/01/31/javascript-breakpoint/"/>
+    <link href="http://andrijac.github.io/blog/2014/01/31/javascript-breakpoint/"/>
     <updated>2014-01-31T09:44:00+00:00</updated>
-    <id>http://andrijac.github.io//blog/2014/01/31/javascript-breakpoint</id>
+    <id>http://andrijac.github.io/blog/2014/01/31/javascript-breakpoint</id>
     <content type="html"><![CDATA[<p>This post will describe how to set breakpoint in before any javascript method call from console.</p>
 
 <ul>
@@ -666,9 +666,9 @@ Wrapper should look like this:</p>
   
   <entry>
     <title type="html"><![CDATA[Octopress publishing environment in the cloud]]></title>
-    <link href="http://andrijac.github.io//blog/2013/12/21/octopress-publishing-environment-in-the-cloud/"/>
+    <link href="http://andrijac.github.io/blog/2013/12/21/octopress-publishing-environment-in-the-cloud/"/>
     <updated>2013-12-21T10:29:00+00:00</updated>
-    <id>http://andrijac.github.io//blog/2013/12/21/octopress-publishing-environment-in-the-cloud</id>
+    <id>http://andrijac.github.io/blog/2013/12/21/octopress-publishing-environment-in-the-cloud</id>
     <content type="html"><![CDATA[<p>I was looking for a blog platform:</p>
 
 <ul>
@@ -931,9 +931,9 @@ Github recommends HTTPS over SSH, <a href="http://stackoverflow.com/a/11041782/8
   
   <entry>
     <title type="html"><![CDATA[Backup existing project to cloud source control]]></title>
-    <link href="http://andrijac.github.io//blog/2013/12/02/backup-existing-project-to-cloud-source-control/"/>
+    <link href="http://andrijac.github.io/blog/2013/12/02/backup-existing-project-to-cloud-source-control/"/>
     <updated>2013-12-02T07:12:00+00:00</updated>
-    <id>http://andrijac.github.io//blog/2013/12/02/backup-existing-project-to-cloud-source-control</id>
+    <id>http://andrijac.github.io/blog/2013/12/02/backup-existing-project-to-cloud-source-control</id>
     <content type="html"><![CDATA[<p>This artical explains how to backup your existing Visual Studio project to Bitbucket using Mercurial. This may as well apply to any other type of project out there, but I might use some Visual Studio specifics in article.</p>
 
 <p>All you need for this is to download <a href="http://mercurial.selenic.com/">Mercurial</a>.</p>
