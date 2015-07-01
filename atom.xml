@@ -4,7 +4,7 @@
   <title><![CDATA[Andrija's Blog]]></title>
   <link href="http://andrijac.github.io/atom.xml" rel="self"/>
   <link href="http://andrijac.github.io/"/>
-  <updated>2015-06-25T19:08:35+00:00</updated>
+  <updated>2015-07-01T07:06:10+00:00</updated>
   <id>http://andrijac.github.io/</id>
   <author>
     <name><![CDATA[Andrija Cacanovic]]></name>
@@ -12,6 +12,48 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Migrating Octopress]]></title>
+    <link href="http://andrijac.github.io/blog/2015/07/01/migrating-octopress/"/>
+    <updated>2015-07-01T06:49:00+00:00</updated>
+    <id>http://andrijac.github.io/blog/2015/07/01/migrating-octopress</id>
+    <content type="html"><![CDATA[<p>Quick notes on how to migrate existing Octopress setup (version 2) to new environment.<br>
+Here, I am migrating from <a href="lite.nitrous.io">lite.nitrous.io</a> (now obsolete) to <a href="pro.nitrous.io">pro.nitrous.io</a>.</p>
+
+<h2>Steps</h2>
+
+<ul>
+<li><code>clone</code> source branch => <code>git clone &lt;url&gt; --branch source &lt;folder-name&gt;</code></li>
+<li>Check Ruby version. It should be 1.9.3</li>
+<li><code>cd</code> in Octopress work folder:</li>
+<li><code>gem install bundler</code></li>
+<li><code>bundle install</code></li>
+</ul>
+
+
+<p>If not already set: <br>
+<code>git config --global user.email "name@example.com"</code><br>
+<code>git config --global user.name "your\_userusername"</code></p>
+
+<ul>
+<li><code>rake setup_github_pages</code></li>
+<li>reset HEAD in _deploy folder: <br>
+<code>git fetch</code><br>
+<code>git reset --hard origin/master</code></li>
+</ul>
+
+
+<p>Try:</p>
+
+<ul>
+<li><code>rake generate</code></li>
+<li><code>rake preview</code></li>
+<li><code>rake deploy</code></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Read multiple files in Node.js]]></title>

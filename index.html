@@ -9,8 +9,8 @@
   <meta name="author" content="Andrija Cacanovic">
 
   
-  <meta name="description" content="I had a requirement to read multiple files in one go in Node.js project. Requirement: Read UTF8 files asynchronously.
-Notify when each file read is &hellip;">
+  <meta name="description" content="Quick notes on how to migrate existing Octopress setup (version 2) to new environment.
+Here, I am migrating from lite.nitrous.io (now obsolete) to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,75 @@ Notify when each file read is &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/01/migrating-octopress/">Migrating Octopress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-01T06:49:00+00:00" pubdate data-updated="true">Jul 1<span>st</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Quick notes on how to migrate existing Octopress setup (version 2) to new environment.<br>
+Here, I am migrating from <a href="lite.nitrous.io">lite.nitrous.io</a> (now obsolete) to <a href="pro.nitrous.io">pro.nitrous.io</a>.</p>
+
+<h2>Steps</h2>
+
+<ul>
+<li><code>clone</code> source branch => <code>git clone &lt;url&gt; --branch source &lt;folder-name&gt;</code></li>
+<li>Check Ruby version. It should be 1.9.3</li>
+<li><code>cd</code> in Octopress work folder:</li>
+<li><code>gem install bundler</code></li>
+<li><code>bundle install</code></li>
+</ul>
+
+
+<p>If not already set: <br>
+<code>git config --global user.email "name@example.com"</code><br>
+<code>git config --global user.name "your\_userusername"</code></p>
+
+<ul>
+<li><code>rake setup_github_pages</code></li>
+<li>reset HEAD in _deploy folder: <br>
+<code>git fetch</code><br>
+<code>git reset --hard origin/master</code></li>
+</ul>
+
+
+<p>Try:</p>
+
+<ul>
+<li><code>rake generate</code></li>
+<li><code>rake preview</code></li>
+<li><code>rake deploy</code></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1190,6 +1259,10 @@ hg push
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/07/01/migrating-octopress/">Migrating Octopress</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/05/08/read-multiple-files-in-node-dot-js/">Read multiple files in Node.js</a>
