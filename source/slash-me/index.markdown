@@ -1,0 +1,48 @@
+---
+layout: page
+title: "/me"
+date: 2015-07-05 18:31
+comments: true
+sharing: false
+footer: true
+---
+
+Living in<br>
+[google.com/+AndrijaCacanovic](https://google.com/+AndrijaCacanovic)
+
+Coding at<br>
+[github.com/andrijac](https://github.com/andrijac)<br>
+[gist.github.com/andrijac](https://gist.github.com/andrijac)
+
+Working at<br>
+[linkedin.com/in/andrijacacanovic](https://www.linkedin.com/in/andrijacacanovic)
+
+Small projects
+---
+
+Upwards (C#)<br>
+https://github.com/andrijac/upwards
+
+SendEmail (C#)<br>
+https://github.com/andrijac/SendEmail
+
+multiple-file-read (node.js)<br>
+https://github.com/andrijac/multiple-file-read
+
+Ruler (C#) - forked, added features<br>
+https://github.com/andrijac/ruler
+
+break.js (javascript)<br>
+https://github.com/andrijac/break-js
+
+timestamp (C#)<br>
+https://github.com/andrijac/timestamp
+
+NoCache (C#)<br>
+https://github.com/andrijac/nocache
+
+regsecedit (C#)<br>
+https://github.com/andrijac/regsecedit
+
+Mini Chat (javascript/html/asp.net/node.js)<br>
+https://github.com/andrijac/mini-chat
