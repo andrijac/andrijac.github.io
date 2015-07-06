@@ -2,9 +2,9 @@
 layout: page
 title: "/me"
 date: 2015-07-05 18:31
-comments: true
+comments: false
 sharing: false
-footer: true
+footer: false
 ---
 
 Living in<br>
