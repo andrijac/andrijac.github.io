@@ -1,4 +1,0 @@
-This is a Brave Rewards publisher verification file.
-
-Domain: andrijac.github.io
-Token: b8bd77a9e6ffc8c04ba926c79fc331e2e1febb189bdddc2eb1602c6599e69331
